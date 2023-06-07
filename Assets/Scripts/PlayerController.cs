@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour
 
     // jumping
     public float jumpForce = 1f;
+    private bool grounded;
 
     // animation
     public Animator animator;
@@ -31,6 +32,12 @@ public class PlayerController : MonoBehaviour
         //Debug.Log(horizontalMovement);
         movement.x = horizontalMovement * moveSpeed;
 
+        // jumping
+        if (Input.GetButtonDown("Jump") && grounded)
+        {
+            body.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+        }
+
         // animation
         animator.SetFloat("speed", Mathf.Abs(horizontalMovement));
     }
@@ -40,10 +47,19 @@ public class PlayerController : MonoBehaviour
         // moving
         transform.Translate(movement * Time.deltaTime);
 
-        // jumping
-        if (Input.GetButton("Jump"))
+    }
+    void OnTriggerStay2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Platform"))
         {
-            body.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+            grounded = true;
+        }
+    }
+    void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Platform"))
+        {
+            grounded = false;
         }
     }
 }
