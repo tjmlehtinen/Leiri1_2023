@@ -60,6 +60,7 @@ public class PlayerController : MonoBehaviour
         else
         {
             body.isKinematic = false;
+            movement.y = 0;
         }
         // animation
         animator.SetFloat("speed", Mathf.Abs(horizontalMovement));
